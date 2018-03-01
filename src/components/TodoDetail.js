@@ -7,10 +7,13 @@ export default class TodoDetail extends React.Component {
             isChecked: this.props.todos.done
         }
     }
+
     // Rerendering child components with new data
     componentWillReceiveProps(nextProps) {
         this.setState({ isChecked: nextProps.todos.done });
     }
+
+     //Checking whether check is checked or not
     toggleCheckboxChange(e) {
         // Updating local changes first and then inform your parent
         this.setState(({ isChecked }) => (

@@ -15,6 +15,7 @@ export default class TodoList extends React.Component {
         //Bind the this context to the handler function
         this.updateChecking = this.updateChecking.bind(this);
     }
+
     //This method is updating 
     updateChecking = (taskID, taskStatus, e) => {
         //If shift key is pressed then store start and end values
@@ -60,6 +61,7 @@ export default class TodoList extends React.Component {
             sessionStorage.setItem("sessionData", JSON.stringify(this.state.taskList));
         }
     }
+    
     //Select all the values to checked or unchecked based on the condition
     checkAll() {
         //  Toggle the Check all status
