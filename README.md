@@ -27,6 +27,6 @@ Main.js- component initiates TodoList component.<br/>
 
 ### Implemented  nice to have Features
 
-- you can maintain the state of checked items when we reload the page
-- you can develop this component in a way that it (or pieces of it) could be reused elsewhere in our project
+- Implemented session storage to store state of checked items when we reload the page.
+- Implemented react components in a way that it (or pieces of it) could be reused elsewhere in our project.
 
