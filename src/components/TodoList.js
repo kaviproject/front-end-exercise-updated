@@ -14,8 +14,6 @@ export default class TodoList extends React.Component {
         }
         // Bind the this context to the handler function
         this.updateChecking = this.updateChecking.bind(this);
-        //Bind this context
-        // this.shiftKeyRelease = this.shiftKeyRelease.bind(this);
     }
     //This method is updating 
     updateChecking = (taskID, taskStatus, e) => {
@@ -30,11 +28,14 @@ export default class TodoList extends React.Component {
         else {
             //Updating parent item 
             this.state.taskList[taskID].done = taskStatus;
+            
+            //Implemented session storage to persist state values in the browser
+            sessionStorage.setItem("sessionData",JSON.stringify(this.state.taskList));
+            sessionStorage.getItem("sessionData")
         }
     };
     //onshift key method
     shiftKeyRelease(e) {
-        debugger;
         setTimeout(200);
         if (!e.shiftKey) {
             //range checking      
@@ -42,16 +43,19 @@ export default class TodoList extends React.Component {
                 let tempTaskList = this.state.taskList;
                 //tasklist update
                 for (var i = (this.state.start) - 1; i < (this.state.end); i++) {
-                    debugger;
                     tempTaskList[i].done = true;
                 }
+                //updating the tasklist
                 this.setState({
                     taskList: tempTaskList
                 })
+                //reset the state values
                 this.state.start = -1;
                 this.state.end = -1;
 
             }
+            sessionStorage.setItem("sessionData",JSON.stringify(this.state.taskList));
+            sessionStorage.getItem("sessionData")
         }
     }
 
@@ -69,10 +73,17 @@ export default class TodoList extends React.Component {
         this.state.taskList.map((todo) => {
             todo.done = tfstatus;
         });
+            sessionStorage.setItem("sessionData",JSON.stringify(this.state.taskList));
+            sessionStorage.getItem("sessionData")
     }
 
     render() {
         //Extracting listitems from the list using map 
+        if(sessionStorage.getItem("sessionData")!=null)
+         {
+             var data=sessionStorage.getItem("sessionData");
+             this.state.taskList=JSON.parse(data);
+         }
         var todos = this.state.taskList.map(function (todo) {
             return (
                 <li key={todo.id} style={{ listStyleType: "none", borderBottom: '3px solid #979797', boxShadow: '7px 7px #75A5B4' }} className="list-group-item">

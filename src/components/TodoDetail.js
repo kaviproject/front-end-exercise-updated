@@ -5,7 +5,6 @@ export default class TodoDetail extends React.Component {
         super(props);
         this.state = {
             isChecked: this.props.todos.done
-
         }
     }
     // Rerendering child components with new data
@@ -19,10 +18,8 @@ export default class TodoDetail extends React.Component {
                 isChecked: !isChecked
             }
         ));
-        console.log("shift key" + e.shiftkey)
-
-        // Update parent
-        this.props.updateChecking(this.props.todos.id, this.state.isChecked, e);
+        // Update parent 
+        this.props.updateChecking(this.props.todos.id,e.target.checked , e);
     }
 
     render() {
