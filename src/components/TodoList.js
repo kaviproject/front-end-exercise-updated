@@ -12,15 +12,17 @@ export default class TodoList extends React.Component {
             start: -1,
             end: -1
         }
-        // Bind the this context to the handler function
+        //Bind the this context to the handler function
         this.updateChecking = this.updateChecking.bind(this);
     }
     //This method is updating 
     updateChecking = (taskID, taskStatus, e) => {
+        //If shift key is pressed then store start and end values
         if (e.shiftKey) {
             if (this.state.start == -1) {
                 this.state.start = taskID;
             }
+            //If shift key is not pressed update the global taskList 
             else {
                 this.state.end = taskID;
             }
@@ -28,62 +30,59 @@ export default class TodoList extends React.Component {
         else {
             //Updating parent item 
             this.state.taskList[taskID].done = taskStatus;
-            
+
             //Implemented session storage to persist state values in the browser
-            sessionStorage.setItem("sessionData",JSON.stringify(this.state.taskList));
-            sessionStorage.getItem("sessionData")
+            sessionStorage.setItem("sessionData", JSON.stringify(this.state.taskList));
         }
     };
-    //onshift key method
+
+    //Onshift key method while releasing the shift key value
     shiftKeyRelease(e) {
         setTimeout(200);
         if (!e.shiftKey) {
-            //range checking      
+
+            // Checking validity of start and end values before updating the tasklist status ani pettu   
             if ((this.state.start > -1) && (this.state.end > -1) && (this.state.start < this.state.end)) {
                 let tempTaskList = this.state.taskList;
-                //tasklist update
+                //Tasklist update based on the range value
                 for (var i = (this.state.start) - 1; i < (this.state.end); i++) {
                     tempTaskList[i].done = true;
                 }
-                //updating the tasklist
+                //Updating the tasklist
                 this.setState({
                     taskList: tempTaskList
                 })
-                //reset the state values
+                //Reset the state values
                 this.state.start = -1;
                 this.state.end = -1;
 
             }
-            sessionStorage.setItem("sessionData",JSON.stringify(this.state.taskList));
-            sessionStorage.getItem("sessionData")
+            sessionStorage.setItem("sessionData", JSON.stringify(this.state.taskList));
         }
     }
-
-    checkall() {
-        // Based on check all status
+    //Select all the values to checked or unchecked based on the condition
+    checkAll() {
         //  Toggle the Check all status
         var tfstatus = !this.state.checkAllStatus;
-
-        //this.state.checkAllStatus = !this.state.checkAllStatus;
+        //
         this.setState({
             checkAllStatus: !this.state.checkAllStatus,
         });
 
-        // Now Update each task status in task list with "Check"
+        // Now Update each task status in task list with check
         this.state.taskList.map((todo) => {
             todo.done = tfstatus;
         });
-            sessionStorage.setItem("sessionData",JSON.stringify(this.state.taskList));
-            sessionStorage.getItem("sessionData")
+        sessionStorage.setItem("sessionData", JSON.stringify(this.state.taskList));
     }
 
     render() {
-        //Extracting listitems from the list using map 
-        if(sessionStorage.getItem("sessionData")!=null)
-         {
-             var data=sessionStorage.getItem("sessionData");
-             this.state.taskList=JSON.parse(data);
-         }
+        // On load check if the tasklist already exists in session storage or not 
+        if (sessionStorage.getItem("sessionData") != null) {
+            var data = sessionStorage.getItem("sessionData");
+            this.state.taskList = JSON.parse(data);
+        }
+        //Extracting listitems from the list using map
         var todos = this.state.taskList.map(function (todo) {
             return (
                 <li key={todo.id} style={{ listStyleType: "none", borderBottom: '3px solid #979797', boxShadow: '7px 7px #75A5B4' }} className="list-group-item">
@@ -91,11 +90,12 @@ export default class TodoList extends React.Component {
                 </li>
             )
         }.bind(this))
+
         return (
             <div onKeyUp={this.shiftKeyRelease.bind(this)}>
                 <Header />
                 <br />
-                <button type="submit" style={{ "marginLeft": '30%', boxShadow: '2px 5px #75A5B4' }} onClick={this.checkall.bind(this)}>{this.state.checkAllStatus ? 'Unselect All' : 'Select All'}</button>
+                <button type="submit" style={{ "marginLeft": '30%', boxShadow: '2px 5px #75A5B4' }} onClick={this.checkAll.bind(this)}>{this.state.checkAllStatus ? 'Unselect All' : 'Select All'}</button>
                 <br />
                 <ul className="col-md-4 list-group" style={{ "marginLeft": '30%', borderCollapse: 'collapse' }} >
                     &nbsp; &nbsp; &nbsp; &nbsp;

@@ -18,8 +18,8 @@ export default class TodoDetail extends React.Component {
                 isChecked: !isChecked
             }
         ));
-        // Update parent 
-        this.props.updateChecking(this.props.todos.id,e.target.checked , e);
+        // Update parent component
+        this.props.updateChecking(this.props.todos.id, e.target.checked, e);
     }
 
     render() {
