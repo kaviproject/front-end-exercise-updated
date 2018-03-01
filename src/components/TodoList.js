@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import TodoDetail from './TodoDetail';
 import Header from './Header';
 
-
 export default class TodoList extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +17,7 @@ export default class TodoList extends React.Component {
         //Bind this context
         // this.shiftKeyRelease = this.shiftKeyRelease.bind(this);
     }
-
+    //This method is updating 
     updateChecking = (taskID, taskStatus, e) => {
         if (e.shiftKey) {
             if (this.state.start == -1) {
@@ -27,50 +25,35 @@ export default class TodoList extends React.Component {
             }
             else {
                 this.state.end = taskID;
-                //
-                if ((this.state.start > -1) && (this.state.end > -1) && (this.state.start < this.state.end)) {
-                    let tempTaskList = this.state.taskList;
-                    ////tasklist update
-                    for (var i = (this.state.start) - 1; i < (this.state.end); i++) {
-                        debugger;
-                        tempTaskList[i].done = true;
-                    }
-                    this.setState({
-                        taskList: tempTaskList
-                    })
-                    //  this.state.taskList =tempTaskList;
-                    this.state.start = -1;
-                    this.state.end = -1;
-
-                }
             }
         }
         else {
-            console.log("state start" + this.state.start);
             //Updating parent item 
             this.state.taskList[taskID].done = taskStatus;
-
         }
-
     };
     //onshift key method
-    /* shiftKeyRelease(e) {
-         console.log("checking");
+    shiftKeyRelease(e) {
+        debugger;
         setTimeout(200);
-         //shift key or not?
-         if (!e.shiftKey) {
-             //range checking      
-             if ((this.state.start > -1) &&(this.state.end > -1) && (this.state.start < this.state.end)) {
-                 ////tasklist update
-                   for(var i = this.state.start; i < (this.state.end); i++)
-                   {
-                    this.state.taskList[i].done = false;
-                   }
-                   this.state.start = -1;
-                   this.state.end = -1;
-             }
-         }      
-     }*/
+        if (!e.shiftKey) {
+            //range checking      
+            if ((this.state.start > -1) && (this.state.end > -1) && (this.state.start < this.state.end)) {
+                let tempTaskList = this.state.taskList;
+                //tasklist update
+                for (var i = (this.state.start) - 1; i < (this.state.end); i++) {
+                    debugger;
+                    tempTaskList[i].done = true;
+                }
+                this.setState({
+                    taskList: tempTaskList
+                })
+                this.state.start = -1;
+                this.state.end = -1;
+
+            }
+        }
+    }
 
     checkall() {
         // Based on check all status
@@ -98,7 +81,7 @@ export default class TodoList extends React.Component {
             )
         }.bind(this))
         return (
-            <div>
+            <div onKeyUp={this.shiftKeyRelease.bind(this)}>
                 <Header />
                 <br />
                 <button type="submit" style={{ "marginLeft": '30%', boxShadow: '2px 5px #75A5B4' }} onClick={this.checkall.bind(this)}>{this.state.checkAllStatus ? 'Unselect All' : 'Select All'}</button>
